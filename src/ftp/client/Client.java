@@ -9,6 +9,7 @@ import ftp.client.commands.Commander;
 import ftp.client.io.Channel;
 import ftp.client.io.ChannelWrapper;
 import ftp.client.io.ClientChannel;
+import ftp.client.response.Response;
 
 /**
  * Classe gérant un client (canal de controle et canal de données)
@@ -58,20 +59,27 @@ public class Client implements Closeable {
 	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
-		Commander.run(this, "manual");
+		run("manual");
 		
-		Commander.run(this, "username", "anonymous");
-		Commander.run(this, "password", "1234");
+		run("username", "anonymous");
+		run("password", "1234");
 		
-		Commander.run(this, "login", "anonymous", "1234");
+		run("login", "anonymous", "1234");
 		
-		Commander.run(this, "pasv");
+		run("pasv");
 		
-		throw new IOException("End of loop");
+		run("quit");
+		
+		//throw new IOException("End of loop");
 	}
 	
 	public void setDataChannel(Channel channel) {
+		System.out.println("Using data channel " + channel.getAddress().getHostAddress() + ":" + channel.getPort());
 		dataWrapper.setChannel(channel);
+	}
+	
+	public Response run(String... values) throws IOException {
+		return Commander.run(this, values);
 	}
 	
 	/**

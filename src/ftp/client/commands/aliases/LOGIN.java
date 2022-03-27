@@ -1,15 +1,16 @@
-package ftp.client.commands;
+package ftp.client.commands.aliases;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
+import ftp.client.commands.Command;
 import ftp.client.response.Response;
 import ftp.client.response.StatusType;
 
 @FTP({ "login", "logn" })
-public class LoginCommand extends Command {
+public class LOGIN extends Command {
 	@Override
 	protected String getParamsExpression() {
 		return "(?<login>\\S+) (?<password>\\S+)";

@@ -11,7 +11,7 @@ import ftp.client.response.Response;
  * Base de toutes les commandes FTP gérées par le client
  */
 public abstract class Command {
-	public static boolean DISPLAY_OUTPUT = true;
+	public static boolean DISPLAY_OUTPUT = false;
 	
 	/** Exécute la commande client */
 	public Response run(Client client, String parameters) throws IOException {
