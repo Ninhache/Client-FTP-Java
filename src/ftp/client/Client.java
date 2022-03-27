@@ -51,9 +51,10 @@ public class Client implements Closeable {
 	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
+		Commander.run(this, "manual");
+		
 		Commander.run(this, "username", "anonymous");
 		Commander.run(this, "password", "1234");
-		
 		
 		Commander.run(this, "login", "anonymous", "1234");
 		

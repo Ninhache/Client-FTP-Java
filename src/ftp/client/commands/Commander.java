@@ -61,6 +61,9 @@ public final class Commander {
 		
 		String name = match.group("command").toLowerCase();
 		String params = match.group("params");
+		if (params == null) {
+			params = "";
+		}
 		
 		Command comm = COMMANDS.get(name);
 		
