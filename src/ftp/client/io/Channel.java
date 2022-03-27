@@ -1,16 +1,15 @@
-package ftpclient.io;
+package ftp.client.io;
+
+import static ftp.client.io.Utils.*;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-import static ftpclient.io.Utils.*;
 
 /**
  * Encapsule une socket TCP ainsi que ses flux d'entrée et de sortie
@@ -31,6 +30,16 @@ public class Channel implements Closeable {
 	 */
 	public Channel(String host, int port) throws UnknownHostException {
 		this(InetAddress.getByName(host), port);
+	}
+	
+	/**
+	 * Construit un canal sur l'adresse et le port spécifiés
+	 * @param address L'adresse sur laquelle se connecter
+	 * @param port Port de connexion
+	 */
+	public Channel(InetAddress address, int port) {
+		ADDRESS = address;
+		PORT = port;
 	}
 	
 	public Socket getSocket() {
@@ -55,14 +64,29 @@ public class Channel implements Closeable {
 		out = new PrintWriter(socket.getOutputStream(), true);
 	}
 
-	/**
-	 * Construit un canal sur l'adresse et le port spécifiés
-	 * @param address L'adresse sur laquelle se connecter
-	 * @param port Port de connexion
-	 */
-	public Channel(InetAddress address, int port) {
-		ADDRESS = address;
-		PORT = port;
+	public void println(String value) {
+		out.println(value);
+	}
+	
+	public void println(String... value) {
+		println(String.join(" ", value));
+	}
+	
+	public String readln() throws IOException {
+		return in.readLine();
+	}
+	
+	public String readlns() throws IOException {
+		StringBuilder sb = new StringBuilder(readln());
+		while (ready()) {
+			sb.append("\n");
+			sb.append(readln());
+		}
+		return sb.toString();
+	}
+	
+	public boolean ready() throws IOException {
+		return in.ready();
 	}
 	
 	@Override

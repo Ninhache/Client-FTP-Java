@@ -1,4 +1,4 @@
-package ftpclient;
+package ftp.client;
 
 /**
  * Constantes de l'application

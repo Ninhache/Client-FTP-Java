@@ -1,4 +1,4 @@
-package ftpclient.io;
+package ftp.client.io;
 
 import java.io.IOException;
 import java.io.InputStream;

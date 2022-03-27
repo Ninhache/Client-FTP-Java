@@ -1,22 +1,18 @@
-package ftpclient;
+package ftp.client;
 
-import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
-import ftpclient.io.Channel;
-
-import static ftpclient.io.Utils.*;
+import ftp.client.commands.Commander;
+import ftp.client.io.Channel;
 
 /**
  * Classe gérant un client (canal de controle et canal de données)
  */
 public class Client implements Closeable {
-	protected Channel controlChannel;
+	public final Channel control;
 	
 	/**
 	 * Construit un client en se connectant à l'hote sur le port spécifié
@@ -34,7 +30,7 @@ public class Client implements Closeable {
 	 * @param port Port de connexion au serveur FTP
 	 */
 	public Client(InetAddress address, int port) {
-		controlChannel = new Channel(address, port);
+		control = new Channel(address, port);
 	}
 
 	/**
@@ -43,16 +39,26 @@ public class Client implements Closeable {
 	 */
 	public void start() {
 		try {
-			controlChannel.connect();
-			while (!controlChannel.getSocket().isClosed()) 
+			control.connect();
+			while (!control.getSocket().isClosed()) 
 				loop();
 		} catch (IOException exception) {
+			exception.printStackTrace();
 			close();
 		}
 	}
 	
-	protected void loop() {
+	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
+
+		Commander.run(this, "username", "anonymous");
+		Commander.run(this, "password", "1234");
+		
+		
+		Commander.run(this, "login", "anonymous", "1234");
+		
+		
+		throw new IOException("End of loop");
 	}
 	
 	/**
@@ -60,8 +66,8 @@ public class Client implements Closeable {
 	 */
 	@Override
 	public void close() {
-		if (controlChannel != null) {
-			controlChannel.close();
+		if (control != null) {
+			control.close();
 		}
 	}
 }
