@@ -5,8 +5,9 @@ import java.util.regex.Matcher;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
+import ftp.client.response.Response;
 
-@FTP("login")
+@FTP({ "login", "logn" })
 public class LoginCommand extends Command {
 	@Override
 	protected String getParamsExpression() {
@@ -14,8 +15,9 @@ public class LoginCommand extends Command {
 	}
 
 	@Override
-	public void run(Client client, Matcher params) throws IOException {
+	public Response run(Client client, Matcher params) throws IOException {
+		
 		exec(client, "USER", params.group("login"));
-		exec(client, "PASS", params.group("password"));
+		return exec(client, "PASS", params.group("password"));
 	}
 }

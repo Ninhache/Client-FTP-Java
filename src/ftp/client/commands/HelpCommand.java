@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
+import ftp.client.response.Response;
 
 @FTP({ "help", "?", "man", "manual"  })
 public class HelpCommand extends Command {
@@ -14,7 +15,7 @@ public class HelpCommand extends Command {
 	}
 
 	@Override
-	public void run(Client client, Matcher params) throws IOException {
-		send(client, "HELP");
+	public Response run(Client client, Matcher params) throws IOException {
+		return send(client, "HELP");
 	}
 }

@@ -11,6 +11,7 @@ import org.reflections.Reflections;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
+import ftp.client.response.Response;
 
 /** 
  * Système d'analyse de la saisie utilisateur pour l'execution de commandes client
@@ -49,14 +50,14 @@ public final class Commander {
 		}
 	}
 	
-	public static final void run(Client client, String... input) throws IOException {
+	public static final Response run(Client client, String... input) throws IOException {
 		String command = String.join(" ", input);
 		
 		Matcher match = COMMAND_PATTERN.matcher(command);
 		
 		if (!match.matches()) {
 			System.err.println("Invalid command: " + command);
-			return;
+			return null;
 		}
 		
 		String name = match.group("command").toLowerCase();
@@ -69,10 +70,12 @@ public final class Commander {
 		
 		if (comm != null) {
 			System.out.println("Executing '" + command + "' with handler " + comm.getClass().getSimpleName());
-			comm.run(client, params);			
+			return comm.run(client, params);			
 		} else {
 			System.err.println("Command '" + name + "' is unknown");
 		}
+		
+		return null;
 	}
 	
 	public static final Set<String> commandList() {

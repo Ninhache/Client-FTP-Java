@@ -58,6 +58,7 @@ public class Client implements Closeable {
 		
 		Commander.run(this, "login", "anonymous", "1234");
 		
+		Commander.run(this, "pasv");
 		
 		throw new IOException("End of loop");
 	}
