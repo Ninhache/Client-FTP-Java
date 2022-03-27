@@ -7,12 +7,17 @@ import java.net.UnknownHostException;
 
 import ftp.client.commands.Commander;
 import ftp.client.io.Channel;
+import ftp.client.io.ChannelWrapper;
+import ftp.client.io.ClientChannel;
 
 /**
  * Classe gérant un client (canal de controle et canal de données)
  */
 public class Client implements Closeable {
 	public final Channel control;
+	public final Channel data;
+	
+	protected final ChannelWrapper dataWrapper;
 	
 	/**
 	 * Construit un client en se connectant à l'hote sur le port spécifié
@@ -30,7 +35,9 @@ public class Client implements Closeable {
 	 * @param port Port de connexion au serveur FTP
 	 */
 	public Client(InetAddress address, int port) {
-		control = new Channel(address, port);
+		control = new ClientChannel(address, port);
+		dataWrapper = new ChannelWrapper();
+		data = dataWrapper;
 	}
 
 	/**
@@ -61,6 +68,10 @@ public class Client implements Closeable {
 		Commander.run(this, "pasv");
 		
 		throw new IOException("End of loop");
+	}
+	
+	public void setDataChannel(Channel channel) {
+		dataWrapper.setChannel(channel);
 	}
 	
 	/**
