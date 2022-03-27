@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
 import ftp.client.response.Response;
+import ftp.client.response.StatusType;
 
 @FTP({ "login", "logn" })
 public class LoginCommand extends Command {
@@ -16,7 +17,12 @@ public class LoginCommand extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		exec(client, "USER", params.group("login"));
+		Response userResp = exec(client, "USER", params.group("login"));
+		
+		if (userResp.getStatusType() != StatusType.POSITIVE_INTERMEDIATE) {
+			return userResp;
+		}
+		
 		return exec(client, "PASS", params.group("password"));
 	}
 }

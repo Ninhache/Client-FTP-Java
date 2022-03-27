@@ -77,4 +77,21 @@ public class Response {
 		
 		return new Response(status, sb.toString());
 	}
+	
+	public static final Response create(int status, String message, String body) {
+		return parse(String.format("%s\n%d %s", body, status, message));
+	}
+	
+	public static final Response create(int status, String message) {
+		return create(status, message, "");
+	}
+	
+	public static final Response create(int status) {
+		return create(status, "");
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%d %s", getStatusCode(), getStatusMessage());
+	}
 }

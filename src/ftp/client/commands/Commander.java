@@ -70,7 +70,9 @@ public final class Commander {
 		
 		if (comm != null) {
 			System.out.println("Executing '" + command + "' with handler " + comm.getClass().getSimpleName());
-			return comm.run(client, params);			
+			Response resp = comm.run(client, params);
+			//System.out.println(resp);
+			return resp;
 		} else {
 			System.err.println("Command '" + name + "' is unknown");
 		}
