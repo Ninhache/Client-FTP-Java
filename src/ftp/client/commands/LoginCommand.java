@@ -16,7 +16,6 @@ public class LoginCommand extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		
 		exec(client, "USER", params.group("login"));
 		return exec(client, "PASS", params.group("password"));
 	}

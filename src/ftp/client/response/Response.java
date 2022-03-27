@@ -18,12 +18,28 @@ public class Response {
 		return STATUS;
 	}
 	
+	public StatusType getStatusType() {
+		return StatusType.fromStatus(getStatus());
+	}
+
+	public StatusCategory getStatusCategory() {
+		return StatusCategory.fromStatus(getStatus());
+	}
+	
 	public int getStatusCode() {
 		return getStatus().getStatusCode();
 	}
 	
 	public String getStatusMessage() {
 		return getStatus().getMessage();
+	}
+	
+	public boolean ok() {
+		return getStatus().ok();
+	}
+	
+	public boolean error() {
+		return !ok();
 	}
 	
 	public String getBody() {

@@ -14,17 +14,34 @@ public class Status {
 	protected final int STATUS;
 	protected final String MESSAGE;
 	
+	
 	protected Status(int status, String message) {
 		STATUS = status;
 		MESSAGE = message;
 	}
 
+	public StatusType getStatusType() {
+		return StatusType.fromStatus(this);
+	}
+
+	public StatusCategory getStatusCategory() {
+		return StatusCategory.fromStatus(this);
+	}
+	
 	public int getStatusCode() {
 		return STATUS;
 	}
 	
 	public String getMessage() {
 		return MESSAGE;
+	}
+	
+	public boolean ok() {
+		return getStatusType().ok();
+	}
+	
+	public boolean error() {
+		return !ok();
 	}
 	
 	public static Status parse(String value) {
