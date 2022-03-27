@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
 
-@FTP({ "user", "username", "utilisateur" })
+@FTP({ "user", "username" })
 public class UserCommand extends Command {
 	@Override
 	protected String getParamsExpression() {
