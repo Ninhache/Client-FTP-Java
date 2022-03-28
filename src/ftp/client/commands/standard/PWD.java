@@ -20,7 +20,7 @@ public class PWD extends CommandWithoutParameters {
 		
 		Matcher m = PATTERN.matcher(resp.getStatusMessage());
 		if (!m.matches()) {
-			return Response.create(500, "Unable to parse working directory path from response.");
+			return resp;
 		}
 		
 		String directory = m.group("dir");

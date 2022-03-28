@@ -7,17 +7,10 @@ import ftp.client.annotations.FTP;
 import ftp.client.commands.CommandWithoutParameters;
 import ftp.client.response.Response;
 
-@FTP({ "help", "?", "man", "manual"  })
-public class HELP extends CommandWithoutParameters {
+@FTP("cdup")
+public class CDUP extends CommandWithoutParameters {
 	@Override
 	public Response run(Client client) throws IOException {
-		Response resp = send(client, "HELP");
-		
-		if (resp.ok()) {
-			System.out.println("List of FTP commands accepted by the server");
-			System.out.println(resp.getBody());			
-		}
-		
-		return resp;
+		return exec(client, "cwd", "..");
 	}
 }

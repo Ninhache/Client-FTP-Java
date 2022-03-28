@@ -34,8 +34,6 @@ public class PASV extends CommandWithoutParameters {
 		client.setDataChannel(ch);
 		System.out.println("Data channel connected on " + ch.getAddress().getHostAddress() + ":" + ch.getPort());
 		
-
-		
 		return resp;
 	}
 }
