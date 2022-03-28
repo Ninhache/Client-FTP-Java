@@ -13,7 +13,7 @@ import ftp.client.response.StatusType;
 public class LOGIN extends Command {
 	@Override
 	protected String getParamsExpression() {
-		return "(?<login>\\S+) (?<password>\\S+)";
+		return "(?<login>\\p{ASCII}+) (?<password>\\p{ASCII}+)";
 	}
 
 	@Override
