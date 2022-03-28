@@ -80,6 +80,8 @@ public class Client implements Closeable {
 		
 		run("type", "A");
 		
+		run("noop");
+		
 		run("quit");
 		
 		//throw new IOException("End of loop");
