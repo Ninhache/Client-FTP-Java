@@ -11,11 +11,12 @@ import ftp.client.response.Response;
  * Base de toutes les commandes FTP gérées par le client
  */
 public abstract class Command {
-	public static boolean DISPLAY_OUTPUT = false;
+	public static boolean DISPLAY_OUTPUT = true;
 	
 	/** Exécute la commande client */
 	public Response run(Client client, String parameters) throws IOException {
-		Pattern paramsPattern = Pattern.compile(getParamsExpression());
+		String regex = String.format("^%s$", getParamsExpression());
+		Pattern paramsPattern = Pattern.compile(regex);
 		Matcher paramsMatch = paramsPattern.matcher(parameters);
 		
 		if (paramsMatch.matches()) {
@@ -46,7 +47,7 @@ public abstract class Command {
 			sb.append(line);
 			
 			if (DISPLAY_OUTPUT) {
-				System.out.println(line);				
+				System.err.println(line);				
 			}
 		} while (client.control.ready());
 		
