@@ -62,6 +62,8 @@ public class Client implements Closeable {
 		run("manual");
 		
 		run("login", "user", "12345");
+		
+		run("cwd", "pyftpdlib");
 
 		run("username", "anonymous");
 		run("password", "_");
