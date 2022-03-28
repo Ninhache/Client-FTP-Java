@@ -12,7 +12,7 @@ import ftp.client.response.Response;
 public class PASS extends Command {
 	@Override
 	protected String getParamsExpression() {
-		return "(?<password>\\S+)";
+		return "(?<password>\\p{ASCII}+)";
 	}
 
 	@Override

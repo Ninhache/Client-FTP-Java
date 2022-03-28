@@ -8,18 +8,18 @@ import ftp.client.annotations.FTP;
 import ftp.client.commands.Command;
 import ftp.client.response.Response;
 
-@FTP({ "user", "username" })
-public class USER extends Command {
+@FTP({ "cwd", "cd" })
+public class CWD extends Command {
 	@Override
 	protected String getParamsExpression() {
-		return "(?<login>\\p{ASCII}+)";
+		return "(?<dir>((\\.\\.|\\.)[\\/\\\\])?\\p{ASCII}+([\\/\\\\]\\p{ASCII}+)*)";
 	}
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		String username = params.group("login");
-		System.out.println("Authenticating as '" + username + "'...");
-		Response resp = send(client, "USER", username);
-		return resp;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+
 }
