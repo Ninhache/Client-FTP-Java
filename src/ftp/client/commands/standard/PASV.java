@@ -28,9 +28,13 @@ public class PASV extends CommandWithoutParameters {
 		String host = String.format("%s.%s.%s.%s", m.group("h1"), m.group("h2"), m.group("h3"), m.group("h4"));
 		int port = Integer.parseInt(m.group("p1")) * 256 + Integer.parseInt(m.group("p2"));
 		
-		Channel passiveChannel = new ClientChannel(host, port);
-		passiveChannel.connect();
-		client.setDataChannel(passiveChannel);
+		System.out.println("Establishing passive data channel...");
+		Channel ch = new ClientChannel(host, port);
+		ch.connect();
+		client.setDataChannel(ch);
+		System.out.println("Data channel connected on " + ch.getAddress().getHostAddress() + ":" + ch.getPort());
+		
+
 		
 		return resp;
 	}

@@ -62,11 +62,13 @@ public class Client implements Closeable {
 		run("manual");
 		
 		run("username", "anonymous");
-		run("password", "1234");
+		run("password", "_");
 		
-		run("login", "anonymous", "1234");
+		run("login", "user", "12345");
 		
 		run("pasv");
+		
+		run("pwd");
 		
 		run("quit");
 		
@@ -74,7 +76,6 @@ public class Client implements Closeable {
 	}
 	
 	public void setDataChannel(Channel channel) {
-		System.out.println("Using data channel " + channel.getAddress().getHostAddress() + ":" + channel.getPort());
 		dataWrapper.setChannel(channel);
 	}
 	
