@@ -74,6 +74,9 @@ public class Client implements Closeable {
 		run("pwd");
 		run("cd", "pdf/");
 		run("cdup");
+
+		run("structure", "F");
+		run("mode", "S");
 		
 		run("quit");
 		
