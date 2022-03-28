@@ -10,33 +10,32 @@ import ftp.client.annotations.FTP;
 import ftp.client.commands.Command;
 import ftp.client.response.Response;
 
-@FTP("mode")
-public class MODE extends Command {
-	public static final Map<String, String> MODES = new HashMap<>();
+@FTP("type")
+public class TYPE extends Command {
+	public static final Map<String, String> TYPES = new HashMap<>();
 	
 	static {
-		MODES.put("S", "Stream");
-		MODES.put("B", "Block");
-		MODES.put("C", "Compressed");
+		TYPES.put("A", "ASCII");
+		TYPES.put("I", "Binary");
+		TYPES.put("E", "EBCDIC");
 	}
 	
 	@Override
 	protected String getParamsExpression() {
-		return "(?<mode>[SBCsbc])";
+		return "(?<type>[AIEaie])";
 	}
 	
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		String mode = params.group("mode").toUpperCase();
-		Response resp = send(client, "MODE", mode);
-		
+		String type = params.group("type").toUpperCase();
+		Response resp = send(client, "TYPE", type);
+
 		if (resp.ok()) {
-			System.out.println("Transfer mode set to " + MODES.get(mode));
+			System.out.println("Type set to " + TYPES.get(type));
 		} else {
-			System.out.println("Mode '" + mode + "' is unsupported");
+			System.out.println("Type '" + type + "' is unsupported");
 		}
 		
 		return resp;
 	}
-
 }

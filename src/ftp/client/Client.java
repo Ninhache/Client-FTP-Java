@@ -78,6 +78,8 @@ public class Client implements Closeable {
 		run("structure", "F");
 		run("mode", "S");
 		
+		run("type", "A");
+		
 		run("quit");
 		
 		//throw new IOException("End of loop");

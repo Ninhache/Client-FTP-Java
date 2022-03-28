@@ -31,10 +31,11 @@ public class STRU extends Command {
 		Response resp = send(client, "STRU", struct);
 
 		if (resp.ok()) {
-			System.out.println("File transfer structure set to " + STRUCTURES.get(struct).toLowerCase());
+			System.out.println("File transfer structure set to " + STRUCTURES.get(struct));
+		} else {
+			System.out.println("Structure '" + struct + "' is unsupported");
 		}
 		
 		return resp;
 	}
-
 }
