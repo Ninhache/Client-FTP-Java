@@ -19,9 +19,19 @@ public abstract class Command {
 	public static boolean DISPLAY_OUTPUT = true;
 	
 	/**
-	 * Initialise le canal de données du protocole FTP
+	 * Initialise la connection au canal de données
 	 */
-	public Channel configureDataChannel(Client client, Type type, Structure stru, Mode mode) throws IOException {
+	protected void setupDataSocket(Client client) throws IOException {
+		// TODO: Ajouter PORT si PASV ne fonctionne pas
+		execLocal(client, "pasv");
+	}
+	
+	/**
+	 * Configure le canal de données du protocole FTP
+	 */
+	protected Channel setupDataChannel(Client client, Type type, Structure stru, Mode mode) throws IOException {
+		setupDataSocket(client);
+		
 		execLocal(client, "TYPE", type.toString());
 		execLocal(client, "STRU", stru.toString());
 		execLocal(client, "MODE", mode.toString());
@@ -30,10 +40,10 @@ public abstract class Command {
 	}
 	
 	/**
-	 * Initialise le canal de données du protocole FTP
+	 * Configure le canal de données du protocole FTP
 	 */
-	public Channel configureDataChannel(Client client, Type type) throws IOException {
-		return configureDataChannel(client, type, Structure.FILE, Mode.STREAM);
+	protected Channel setupDataChannel(Client client, Type type) throws IOException {
+		return setupDataChannel(client, type, Structure.FILE, Mode.STREAM);
 	}
 	
 	/** Exécute la commande client */

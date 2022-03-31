@@ -68,17 +68,17 @@ public class Client implements Closeable {
 		run("username", "anonymous");
 		run("password", "_");
 		
-		
-		run("pasv");
+		//run("pasv");
 		
 		run("pwd");
 		run("cd", "pdf/");
 		run("cdup");
 
-		run("structure", "F");
-		run("mode", "S");
+		//run("structure", "F");
+		//run("mode", "S");
+		//run("type", "A");
 		
-		run("type", "A");
+		run("ls");
 		
 		run("noop");
 		
