@@ -21,7 +21,7 @@ public class CWD extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		Response resp = send(client, "CWD", params.group("dir"));
+		Response resp = execServer(client, "CWD", params.group("dir"));
 		
 		Matcher m = PATTERN.matcher(resp.getStatusMessage());
 		if (!m.matches()) {

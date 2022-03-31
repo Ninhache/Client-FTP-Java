@@ -28,12 +28,13 @@ public class TYPE extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		String type = params.group("type").toUpperCase();
-		Response resp = send(client, "TYPE", type);
+		Response resp = execServer(client, "TYPE", type);
 
 		if (resp.ok()) {
 			System.out.println("Type set to " + TYPES.get(type));
 		} else {
 			System.out.println("Type '" + type + "' is unsupported");
+			failRequest(resp);
 		}
 		
 		return resp;

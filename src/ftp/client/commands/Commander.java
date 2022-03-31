@@ -11,6 +11,7 @@ import org.reflections.Reflections;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
+import ftp.client.exceptions.EarlyResponseException;
 import ftp.client.response.Response;
 
 /** 
@@ -51,6 +52,14 @@ public final class Commander {
 	}
 	
 	public static final Response run(Client client, String... input) throws IOException {
+		try {
+			return process(client, input);
+		} catch (EarlyResponseException e) {
+			return e.getResponse();
+		}
+	}
+	
+	public static final Response process(Client client, String... input) throws IOException {
 		String command = String.join(" ", input);
 		
 		Matcher match = COMMAND_PATTERN.matcher(command);

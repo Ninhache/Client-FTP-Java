@@ -11,7 +11,7 @@ import ftp.client.response.Response;
 public class QUIT extends CommandWithoutParameters {
 	@Override
 	public Response run(Client client) throws IOException {
-		Response resp = send(client, "QUIT");
+		Response resp = execServer(client, "QUIT");
 		if (resp.ok()) {
 			System.out.println("Quitting FTP client...");
 			client.close();

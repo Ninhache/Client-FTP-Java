@@ -17,6 +17,6 @@ public class PORT extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		return send(client, "PORT", params.group("port"));
+		return execServer(client, "PORT", params.group("port"));
 	}
 }

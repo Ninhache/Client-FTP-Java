@@ -16,7 +16,7 @@ public class PWD extends CommandWithoutParameters {
 
 	@Override
 	public Response run(Client client) throws IOException {
-		Response resp = send(client, "PWD");
+		Response resp = execServer(client, "PWD");
 		
 		Matcher m = PATTERN.matcher(resp.getStatusMessage());
 		if (!m.matches()) {

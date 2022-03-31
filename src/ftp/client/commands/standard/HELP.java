@@ -11,7 +11,7 @@ import ftp.client.response.Response;
 public class HELP extends CommandWithoutParameters {
 	@Override
 	public Response run(Client client) throws IOException {
-		Response resp = send(client, "HELP");
+		Response resp = execServer(client, "HELP");
 		
 		if (resp.ok()) {
 			System.out.println("List of FTP commands accepted by the server");

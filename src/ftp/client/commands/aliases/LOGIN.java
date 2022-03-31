@@ -18,12 +18,12 @@ public class LOGIN extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		Response userResp = exec(client, "USER", params.group("login"));
+		Response userResp = execLocal(client, "USER", params.group("login"));
 		
 		if (userResp.getStatusType() != StatusType.POSITIVE_INTERMEDIATE) {
 			return userResp;
 		}
 		
-		return exec(client, "PASS", params.group("password"));
+		return execLocal(client, "PASS", params.group("password"));
 	}
 }

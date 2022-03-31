@@ -28,12 +28,13 @@ public class MODE extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		String mode = params.group("mode").toUpperCase();
-		Response resp = send(client, "MODE", mode);
+		Response resp = execServer(client, "MODE", mode);
 		
 		if (resp.ok()) {
 			System.out.println("Transfer mode set to " + MODES.get(mode));
 		} else {
 			System.out.println("Mode '" + mode + "' is unsupported");
+			failRequest(resp);
 		}
 		
 		return resp;

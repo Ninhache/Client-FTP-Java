@@ -11,6 +11,6 @@ import ftp.client.response.Response;
 public class CDUP extends CommandWithoutParameters {
 	@Override
 	public Response run(Client client) throws IOException {
-		return exec(client, "cwd", "..");
+		return execLocal(client, "cwd", "..");
 	}
 }

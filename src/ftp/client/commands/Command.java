@@ -5,6 +5,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ftp.client.Client;
+import ftp.client.exceptions.EarlyResponseException;
+import ftp.client.io.Channel;
+import ftp.client.io.Mode;
+import ftp.client.io.Structure;
+import ftp.client.io.Type;
 import ftp.client.response.Response;
 
 /**
@@ -12,6 +17,24 @@ import ftp.client.response.Response;
  */
 public abstract class Command {
 	public static boolean DISPLAY_OUTPUT = true;
+	
+	/**
+	 * Initialise le canal de données du protocole FTP
+	 */
+	public Channel configureDataChannel(Client client, Type type, Structure stru, Mode mode) throws IOException {
+		execLocal(client, "TYPE", type.toString());
+		execLocal(client, "STRU", stru.toString());
+		execLocal(client, "MODE", mode.toString());
+
+		return client.data;
+	}
+	
+	/**
+	 * Initialise le canal de données du protocole FTP
+	 */
+	public Channel configureDataChannel(Client client, Type type) throws IOException {
+		return configureDataChannel(client, type, Structure.FILE, Mode.STREAM);
+	}
 	
 	/** Exécute la commande client */
 	public Response run(Client client, String parameters) throws IOException {
@@ -30,9 +53,17 @@ public abstract class Command {
 	public abstract Response run(Client client, Matcher params) throws IOException;
 
 	/**
-	 * Envoie une commande textuelle brute au serveur
+	 * Quitte l'exécution de la requête et retourne la réponse passée en paramètre
+	 * @param response La réponse à retourner
 	 */
-	protected Response send(Client client, String... params) throws IOException {
+	protected void failRequest(Response response) {
+		throw new EarlyResponseException(response);
+	}
+	
+	/**
+	 * Envoie une commande textuelle brute au serveur et récupère la réponse
+	 */
+	protected Response execServer(Client client, String... params) throws IOException {
 		client.control.println(params);
 		
 		StringBuilder sb = new StringBuilder();
@@ -55,10 +86,10 @@ public abstract class Command {
 	}
 	
 	/**
-	 * Execute une commande client
+	 * Exécute une commande avec le gestionnaire local correspondant
 	 */
-	protected Response exec(Client client, String... params) throws IOException {
-		return Commander.run(client, params);
+	protected Response execLocal(Client client, String... params) throws IOException {
+		return Commander.process(client, params);
 	}
 	
 	/**

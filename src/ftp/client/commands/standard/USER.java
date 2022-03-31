@@ -19,7 +19,7 @@ public class USER extends Command {
 	public Response run(Client client, Matcher params) throws IOException {
 		String username = params.group("login");
 		System.out.println("Authenticating as '" + username + "'...");
-		Response resp = send(client, "USER", username);
+		Response resp = execServer(client, "USER", username);
 		return resp;
 	}
 }

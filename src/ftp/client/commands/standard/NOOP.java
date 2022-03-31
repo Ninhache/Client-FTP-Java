@@ -11,6 +11,6 @@ import ftp.client.response.Response;
 public class NOOP extends CommandWithoutParameters {
 	@Override
 	public Response run(Client client) throws IOException {
-		return send(client, "NOOP");
+		return execServer(client, "NOOP");
 	}
 }

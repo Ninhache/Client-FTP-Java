@@ -28,12 +28,13 @@ public class STRU extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		String struct = params.group("struct").toUpperCase();
-		Response resp = send(client, "STRU", struct);
+		Response resp = execServer(client, "STRU", struct);
 
 		if (resp.ok()) {
 			System.out.println("File transfer structure set to " + STRUCTURES.get(struct));
 		} else {
 			System.out.println("Structure '" + struct + "' is unsupported");
+			failRequest(resp);
 		}
 		
 		return resp;

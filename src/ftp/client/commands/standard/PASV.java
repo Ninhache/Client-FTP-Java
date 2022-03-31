@@ -18,7 +18,7 @@ public class PASV extends CommandWithoutParameters {
 
 	@Override
 	public Response run(Client client) throws IOException {
-		Response resp = send(client, "PASV");
+		Response resp = execServer(client, "PASV");
 
 		Matcher m = PATTERN.matcher(resp.getStatusMessage());
 		if (!m.matches()) {
