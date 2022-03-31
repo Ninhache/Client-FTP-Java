@@ -78,7 +78,7 @@ public final class Commander {
 		Command comm = COMMANDS.get(name);
 		
 		if (comm != null) {
-			//System.out.println("Executing '" + command + "' with handler " + comm.getClass().getSimpleName());
+			System.out.println(">> Executing '" + command + "' with handler " + comm.getClass().getSimpleName());
 			Response resp = comm.run(client, params);
 			//System.out.println(resp);
 			return resp;

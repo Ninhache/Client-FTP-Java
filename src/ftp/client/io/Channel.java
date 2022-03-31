@@ -18,12 +18,16 @@ public interface Channel extends Closeable {
 	int getPort();
 	
 	default String readlns() throws IOException {
-		StringBuilder sb = new StringBuilder(readln());
-		while (ready()) {
-			sb.append("\n");
-			sb.append(readln());
+		try {
+			StringBuilder sb = new StringBuilder(readln());
+			while (ready()) {
+				sb.append("\n");
+				sb.append(readln());
+			}
+			return sb.toString();
+		} catch (NullPointerException ex) {
+			return "";
 		}
-		return sb.toString();
 	}
 	
 	@Override

@@ -3,17 +3,27 @@ package ftp.client.io;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.function.Consumer;
 
 /*
  * Encapsule un canal de communication afin de pouvoir changer de canal de façon transparente dans le client 
  */
 public class ChannelWrapper implements Channel {
 	protected Channel channel;
-
-	public ChannelWrapper() {}
 	
-	public ChannelWrapper(Channel channel) {
+	protected final Consumer<Channel> CLOSED_CALLBACK;
+
+	public ChannelWrapper() {
+		this(null);
+	}
+	
+	public ChannelWrapper(Consumer<Channel> closedCallback) {
+		this(null, closedCallback);
+	}
+	
+	public ChannelWrapper(Channel channel, Consumer<Channel> closedCallback) {
 		setChannel(channel);
+		CLOSED_CALLBACK = closedCallback;
 	}
 	
 	public Channel getChannel() {
@@ -21,6 +31,7 @@ public class ChannelWrapper implements Channel {
 	}
 	
 	public void setChannel(Channel channel) {
+		System.out.println("=== DATA CHANNEL ASSIGNED ===");
 		setChannel(channel, true);
 	}
 	
@@ -78,7 +89,12 @@ public class ChannelWrapper implements Channel {
 	}
 
 	@Override
-	public void close() {
+	public void close() {}
+	
+	public void closeChannel() {
+		if (CLOSED_CALLBACK != null) {
+			CLOSED_CALLBACK.accept(channel);
+		}
 		channel.close();
 	}
 }

@@ -9,6 +9,9 @@ import ftp.client.commands.Commander;
 import ftp.client.io.Channel;
 import ftp.client.io.ChannelWrapper;
 import ftp.client.io.ClientChannel;
+import ftp.client.io.Mode;
+import ftp.client.io.Structure;
+import ftp.client.io.Type;
 import ftp.client.response.Response;
 
 /**
@@ -17,6 +20,10 @@ import ftp.client.response.Response;
 public class Client implements Closeable {
 	public final Channel control;
 	public final Channel data;
+	
+	protected Type dataType;
+	protected Structure dataStructure;
+	protected Mode dataMode;
 	
 	protected final ChannelWrapper dataWrapper;
 	
@@ -37,7 +44,7 @@ public class Client implements Closeable {
 	 */
 	public Client(InetAddress address, int port) {
 		control = new ClientChannel(address, port);
-		dataWrapper = new ChannelWrapper();
+		dataWrapper = new ChannelWrapper(this::onDataChannelClosed);
 		data = dataWrapper;
 	}
 
@@ -59,38 +66,69 @@ public class Client implements Closeable {
 	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
-		run("manual");
+		//run("manual");
 		
 		run("login", "user", "12345");
 		
-		run("cwd", "pyftpdlib");
+		//run("cwd", "pyftpdlib");
 
-		run("username", "anonymous");
-		run("password", "_");
-		
-		//run("pasv");
+		//run("username", "anonymous");
+		//run("password", "_");
 		
 		run("pwd");
-		run("cd", "pdf/");
-		run("cdup");
+		//run("cd", "pdf/");
+		//run("cdup");
 
-		//run("structure", "F");
-		//run("mode", "S");
-		//run("type", "A");
-		
 		run("ls");
+		//run("noop");
+		//run("list");
 		
-		run("noop");
 		
 		run("quit");
 		
 		//throw new IOException("End of loop");
 	}
 	
-	public void setDataChannel(Channel channel) {
-		dataWrapper.setChannel(channel);
+	/**
+	 * Créée le canal de données
+	 */
+	public Client createDC() throws IOException {
+		run("PASV");
+		return this;
 	}
 	
+	/**
+	 * Assigne le canal de données du client FTP
+	 */
+	public Client setDC(Channel channel) {
+		dataWrapper.setChannel(channel);
+		return this;
+	}
+	
+	/**
+	 * Configure le canal de données du client FTP
+	 */
+	public Client configDC(Type type, Structure stru, Mode mode) throws IOException {
+		dataType = type;
+		run("TYPE", type.toString());
+		dataStructure = stru;
+		run("STRU", stru.toString());
+		dataMode = mode;
+		run("MODE", mode.toString());
+		return this;
+	}
+	
+	/**
+	 * Initialise et configure le canal de données du client FTP
+	 */
+	@SuppressWarnings("resource")
+	public Channel requireDC(Type type, Structure stru, Mode mode) throws IOException {
+		return createDC().configDC(type, stru, mode).data;
+	}
+	
+	/**
+	 * Exécute une commande et retourne sa réponse
+	 */
 	public Response run(String... values) throws IOException {
 		return Commander.run(this, values);
 	}
@@ -103,5 +141,9 @@ public class Client implements Closeable {
 		if (control != null) {
 			control.close();
 		}
+	}
+	
+	protected void onDataChannelClosed(Channel channel) {
+		System.out.println("=== DATA CHANNEL CLOSED ===");
 	}
 }

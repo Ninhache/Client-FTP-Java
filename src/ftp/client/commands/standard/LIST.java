@@ -2,23 +2,23 @@ package ftp.client.commands.standard;
 
 import ftp.client.Client;
 import ftp.client.annotations.FTP;
-import ftp.client.commands.Command;
 import ftp.client.commands.CommandWithoutParameters;
 import ftp.client.io.Channel;
+import ftp.client.io.Mode;
+import ftp.client.io.Structure;
 import ftp.client.io.Type;
 import ftp.client.response.Response;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
 
 @FTP({ "list", "ls", "dir" })
 public class LIST extends CommandWithoutParameters {
     @Override
     public Response run(Client client) throws IOException {
-    	try (Channel data = setupDataChannel(client, Type.ASCII)) {
+    	try (Channel data = client.requireDC(Type.ASCII, Structure.FILE, Mode.STREAM)) {
     		Response resp = execServer(client, "LIST");
     		
-    		System.out.println("Data channel:\n" + data.readlns());
+    		System.out.println("Received data from DC:\n" + data.readlns());
     		
     		return resp;
     	}

@@ -6,10 +6,6 @@ import java.util.regex.Pattern;
 
 import ftp.client.Client;
 import ftp.client.exceptions.EarlyResponseException;
-import ftp.client.io.Channel;
-import ftp.client.io.Mode;
-import ftp.client.io.Structure;
-import ftp.client.io.Type;
 import ftp.client.response.Response;
 
 /**
@@ -17,34 +13,6 @@ import ftp.client.response.Response;
  */
 public abstract class Command {
 	public static boolean DISPLAY_OUTPUT = true;
-	
-	/**
-	 * Initialise la connection au canal de données
-	 */
-	protected void setupDataSocket(Client client) throws IOException {
-		// TODO: Ajouter PORT si PASV ne fonctionne pas
-		execLocal(client, "pasv");
-	}
-	
-	/**
-	 * Configure le canal de données du protocole FTP
-	 */
-	protected Channel setupDataChannel(Client client, Type type, Structure stru, Mode mode) throws IOException {
-		setupDataSocket(client);
-		
-		execLocal(client, "TYPE", type.toString());
-		execLocal(client, "STRU", stru.toString());
-		execLocal(client, "MODE", mode.toString());
-
-		return client.data;
-	}
-	
-	/**
-	 * Configure le canal de données du protocole FTP
-	 */
-	protected Channel setupDataChannel(Client client, Type type) throws IOException {
-		return setupDataChannel(client, type, Structure.FILE, Mode.STREAM);
-	}
 	
 	/** Exécute la commande client */
 	public Response run(Client client, String parameters) throws IOException {
