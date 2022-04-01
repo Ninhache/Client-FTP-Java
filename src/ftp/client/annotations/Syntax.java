@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface FTP {
-	public String[] value();
+public @interface Syntax {
+	String value();
 }
