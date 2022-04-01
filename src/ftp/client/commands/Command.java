@@ -14,7 +14,9 @@ import ftp.client.response.Response;
 public abstract class Command {
 	public static boolean DISPLAY_OUTPUT = true;
 	
-	/** Exécute la commande client */
+	/**
+	 * Exécute la commande client
+	 */
 	public Response run(Client client, String parameters) throws IOException {
 		String regex = String.format("^%s$", getParamsExpression());
 		Pattern paramsPattern = Pattern.compile(regex);
