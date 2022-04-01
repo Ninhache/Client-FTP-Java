@@ -7,14 +7,10 @@ import ftp.client.annotations.FTP;
 import ftp.client.commands.CommandWithoutParameters;
 import ftp.client.response.Response;
 
-@FTP({ "reset", "rein" })
+@FTP({ "rein", "reinitialize", "reset" })
 public class REIN extends CommandWithoutParameters {
     @Override
     public Response run(Client client) throws IOException {
-        Response resp = execServer(client, "REIN");
-        if (resp.ok()) {
-            System.out.println("Reinitialize connexion ...");
-        }
-        return resp;
+        return execServer(client, "REIN");
     }
 }
