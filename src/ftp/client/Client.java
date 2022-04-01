@@ -62,29 +62,33 @@ public class Client implements Closeable {
 	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
-		run("manual");
+		//run("manual");
 		
-		run("help", "NLST");
+		//run("help", "NLST");
 		
 		run("login", "user", "12345");
 		
-		run("cwd", "pyftpdlib");
+		//run("cwd", "pyftpdlib");
 
-		run("username", "anonymous");
-		run("password", "_");
+		//run("username", "anonymous");
+		//run("password", "_");
 		
-		run("pwd");
-		run("list", "images");
+		//run("pwd");
 		
+		//run("list", "ftp");
 
-		run("cd", "pdf/");
+		run("cd", "ftp/");
+		run("mkd", "test_folder");
+		run("mkd", "test_folder_2");
+		run("rmd", "test_folder_2");
+		run("rmd", "test_folder_2");
 		run("list");
-		run("cdup");
+		//run("cdup");
 
-		run("ls");
+		//run("ls");
 		
-		run("noop");
-		run("list");
+		//run("noop");
+		//run("list");
 		
 		
 		run("quit");
@@ -127,8 +131,11 @@ public class Client implements Closeable {
 	/**
 	 * Exécute une commande et retourne sa réponse
 	 */
-	public Response run(String... values) throws IOException {
-		return Commander.run(this, values);
+	protected Response run(String... values) throws IOException {
+		System.out.println("### " + String.join(" ", values));
+		Response resp = Commander.run(this, values);
+		System.out.println("===== ===== =====");
+		return resp;
 	}
 	
 	/**
