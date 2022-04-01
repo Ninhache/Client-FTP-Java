@@ -14,6 +14,8 @@ import java.net.UnknownHostException;
  * Encapsule une socket TCP ainsi que ses flux d'entrée et de sortie
  */
 public class ClientChannel implements Channel {
+	public static final int TIMEOUT = 500;
+	
 	protected Socket socket;
 	protected final InetAddress ADDRESS;
 	protected final int PORT;
@@ -68,6 +70,8 @@ public class ClientChannel implements Channel {
 	@Override
 	public void connect() throws IOException {
 		socket = new Socket(ADDRESS, PORT);
+		socket.setSoTimeout(TIMEOUT);
+		socket.setKeepAlive(true);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		out = new PrintWriter(socket.getOutputStream(), true);
 	}

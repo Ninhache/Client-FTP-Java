@@ -1,8 +1,6 @@
 package ftp.client.commands.standard;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 
 import ftp.client.Client;
@@ -12,14 +10,6 @@ import ftp.client.response.Response;
 
 @FTP("type")
 public class TYPE extends Command {
-	public static final Map<String, String> TYPES = new HashMap<>();
-	
-	static {
-		TYPES.put("A", "ASCII");
-		TYPES.put("I", "Binary");
-		TYPES.put("E", "EBCDIC");
-	}
-	
 	@Override
 	protected String getParamsExpression() {
 		return "(?<type>[AIEaie])";
@@ -30,10 +20,7 @@ public class TYPE extends Command {
 		String type = params.group("type").toUpperCase();
 		Response resp = execServer(client, "TYPE", type);
 
-		if (resp.ok()) {
-			System.out.println("Type set to " + TYPES.get(type));
-		} else {
-			System.out.println("Type '" + type + "' is unsupported");
+		if (!resp.ok()) {
 			failRequest(resp);
 		}
 		

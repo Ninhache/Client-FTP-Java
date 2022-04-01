@@ -43,8 +43,6 @@ public final class Commander {
 				continue;
 			}
 			
-			System.out.println("Registering " + commType.getName() + " as " + String.join(", ", info.value()));
-
 			for (String alias : info.value()) {
 				COMMANDS.put(alias.toLowerCase(), instance);
 			}
@@ -78,9 +76,7 @@ public final class Commander {
 		Command comm = COMMANDS.get(name);
 		
 		if (comm != null) {
-			System.out.println(">> Executing '" + command + "' with handler " + comm.getClass().getSimpleName());
 			Response resp = comm.run(client, params);
-			//System.out.println(resp);
 			return resp;
 		} else {
 			System.err.println("Command '" + name + "' is unknown");

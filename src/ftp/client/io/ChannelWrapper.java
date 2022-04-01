@@ -31,7 +31,6 @@ public class ChannelWrapper implements Channel {
 	}
 	
 	public void setChannel(Channel channel) {
-		System.out.println("=== DATA CHANNEL ASSIGNED ===");
 		setChannel(channel, true);
 	}
 	

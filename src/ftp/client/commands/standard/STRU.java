@@ -1,8 +1,6 @@
 package ftp.client.commands.standard;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 
 import ftp.client.Client;
@@ -12,14 +10,6 @@ import ftp.client.response.Response;
 
 @FTP({ "stru", "struct", "structure" })
 public class STRU extends Command {
-	public static final Map<String, String> STRUCTURES = new HashMap<>();
-	
-	static {
-		STRUCTURES.put("F", "File");
-		STRUCTURES.put("R", "Record");
-		STRUCTURES.put("P", "Page");
-	}
-	
 	@Override
 	protected String getParamsExpression() {
 		return "(?<struct>[FRPfrp])";
@@ -30,10 +20,7 @@ public class STRU extends Command {
 		String struct = params.group("struct").toUpperCase();
 		Response resp = execServer(client, "STRU", struct);
 
-		if (resp.ok()) {
-			System.out.println("File transfer structure set to " + STRUCTURES.get(struct));
-		} else {
-			System.out.println("Structure '" + struct + "' is unsupported");
+		if (!resp.ok()) {
 			failRequest(resp);
 		}
 		

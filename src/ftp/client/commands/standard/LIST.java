@@ -15,12 +15,12 @@ import java.io.IOException;
 public class LIST extends CommandWithoutParameters {
     @Override
     public Response run(Client client) throws IOException {
+    	Response resp = execServer(client, "LIST");
+    	
     	try (Channel data = client.requireDC(Type.ASCII, Structure.FILE, Mode.STREAM)) {
-    		Response resp = execServer(client, "LIST");
-    		
-    		System.out.println("Received data from DC:\n" + data.readlns());
-    		
-    		return resp;
+    		System.out.println(data.readlns());
     	}
+    	
+    	return resp;
     }
 }

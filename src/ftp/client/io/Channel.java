@@ -19,10 +19,15 @@ public interface Channel extends Closeable {
 	
 	default String readlns() throws IOException {
 		try {
-			StringBuilder sb = new StringBuilder(readln());
-			while (ready()) {
-				sb.append("\n");
-				sb.append(readln());
+			StringBuilder sb = new StringBuilder();
+			while(sb.length() == 0) {
+				String line;
+				while ((line = readln()) != null) {
+					if (sb.length() > 0) {
+						sb.append("\n");						
+					}
+					sb.append(line);
+				}
 			}
 			return sb.toString();
 		} catch (NullPointerException ex) {

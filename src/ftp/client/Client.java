@@ -21,10 +21,6 @@ public class Client implements Closeable {
 	public final Channel control;
 	public final Channel data;
 	
-	protected Type dataType;
-	protected Structure dataStructure;
-	protected Mode dataMode;
-	
 	protected final ChannelWrapper dataWrapper;
 	
 	/**
@@ -70,23 +66,41 @@ public class Client implements Closeable {
 		
 		run("login", "user", "12345");
 		
-		//run("cwd", "pyftpdlib");
+		run("cwd", "pyftpdlib");
 
-		//run("username", "anonymous");
-		//run("password", "_");
+		run("username", "anonymous");
+		run("password", "_");
 		
 		run("pwd");
-		//run("cd", "pdf/");
-		//run("cdup");
+		run("cd", "pdf/");
+		run("list");
+		run("cdup");
 
 		run("ls");
+		
 		//run("noop");
-		//run("list");
+		run("list");
 		
 		
 		run("quit");
 		
 		//throw new IOException("End of loop");
+	}
+	
+	@SuppressWarnings("resource")
+	public Channel requireDC(Type type, Structure stru, Mode mode) throws IOException {
+		return configureDC(type, stru, mode).createDC().data;
+	}
+	
+	/**
+	 * Configure le canal de données du client FTP
+	 */
+	public Client configureDC(Type type, Structure stru, Mode mode) throws IOException {
+		run("TYPE", type.toString());
+		run("STRU", stru.toString());
+		run("MODE", mode.toString());
+		
+		return this;
 	}
 	
 	/**
@@ -103,27 +117,6 @@ public class Client implements Closeable {
 	public Client setDC(Channel channel) {
 		dataWrapper.setChannel(channel);
 		return this;
-	}
-	
-	/**
-	 * Configure le canal de données du client FTP
-	 */
-	public Client configDC(Type type, Structure stru, Mode mode) throws IOException {
-		dataType = type;
-		run("TYPE", type.toString());
-		dataStructure = stru;
-		run("STRU", stru.toString());
-		dataMode = mode;
-		run("MODE", mode.toString());
-		return this;
-	}
-	
-	/**
-	 * Initialise et configure le canal de données du client FTP
-	 */
-	@SuppressWarnings("resource")
-	public Channel requireDC(Type type, Structure stru, Mode mode) throws IOException {
-		return createDC().configDC(type, stru, mode).data;
 	}
 	
 	/**

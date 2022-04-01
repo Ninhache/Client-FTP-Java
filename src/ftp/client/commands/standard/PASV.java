@@ -1,8 +1,6 @@
 package ftp.client.commands.standard;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,41 +22,18 @@ public class PASV extends CommandWithoutParameters {
 
 		Matcher m = PATTERN.matcher(resp.getStatusMessage());
 		if (!m.matches()) {
-			reconnect(client);
 			return resp;
 		}
 		
 		String host = String.format("%s.%s.%s.%s", m.group("h1"), m.group("h2"), m.group("h3"), m.group("h4"));
 		int port = Integer.parseInt(m.group("p1")) * 256 + Integer.parseInt(m.group("p2"));
 		
-		System.out.println("Establishing passive data channel...");
+		//System.out.println("Establishing passive data channel...");
 		Channel ch = new ClientChannel(host, port);
 		ch.connect();
 		client.setDC(ch);
-		System.out.println("Data channel connected on " + ch.getAddress().getHostAddress() + ":" + ch.getPort());
+		//System.out.println("Data channel connected on " + ch.getAddress().getHostAddress() + ":" + ch.getPort());
 		
 		return resp;
-	}
-
-	private void reconnect(Client client) {
-		Socket socket = client.data.getSocket();
-		
-		if (socket == null) {
-			return;
-		}
-		
-		try {
-			InetAddress host = socket.getInetAddress();
-			int port = socket.getLocalPort();
-			Channel ch = new ClientChannel(host, port);
-			client.setDC(ch);
-			System.out.println("Data channel reconnected on " + ch.getAddress().getHostAddress() + ":" + ch.getPort());
-		} catch (Exception exc) {
-			if (DISPLAY_OUTPUT) {
-				exc.printStackTrace();
-				System.err.println("Unable to reconnect data channel");
-			}
-		}
-		
 	}
 }
