@@ -4,21 +4,27 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 
 import ftp.client.Client;
+import ftp.client.annotations.Description;
 import ftp.client.annotations.FTP;
+import ftp.client.annotations.Name;
+import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.response.Response;
 import ftp.client.response.StatusType;
 
 @FTP({ "login", "logn" })
+@Name("Login")
+@Description("Authenticate using a username and password to start a FTP session")
+@Syntax("LOGIN <username> <password>")
 public class LOGIN extends Command {
 	@Override
 	protected String getParamsExpression() {
-		return "(?<login>\\p{ASCII}+) (?<password>\\p{ASCII}+)";
+		return "(?<username>\\p{ASCII}+) (?<password>\\p{ASCII}+)";
 	}
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		Response userResp = execLocal(client, "USER", params.group("login"));
+		Response userResp = execLocal(client, "USER", params.group("username"));
 		
 		if (userResp.getStatusType() != StatusType.POSITIVE_INTERMEDIATE) {
 			return userResp;

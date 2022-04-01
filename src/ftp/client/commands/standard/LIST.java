@@ -1,7 +1,10 @@
 package ftp.client.commands.standard;
 
 import ftp.client.Client;
+import ftp.client.annotations.Description;
 import ftp.client.annotations.FTP;
+import ftp.client.annotations.Name;
+import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.io.Channel;
 import ftp.client.io.Mode;
@@ -13,6 +16,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 
 @FTP({ "list", "ls", "dir" })
+@Name("List")
+@Description("Lists the content of the current working directory")
+@Syntax("LIST [directory]")
 public class LIST extends Command {
 	@Override
 	protected String getParamsExpression() {

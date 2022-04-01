@@ -5,11 +5,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ftp.client.Client;
+import ftp.client.annotations.Description;
 import ftp.client.annotations.FTP;
+import ftp.client.annotations.Name;
+import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.response.Response;
 
 @FTP({ "cwd", "cd" })
+@Name("Change Working Directory")
+@Description("navigates to the desired directory")
+@Syntax("CWD <directory>")
 public class CWD extends Command {
 	public static final String REGEX = ".*\"(?<dir>\\S+)\".*";
 	public static final Pattern PATTERN = Pattern.compile(REGEX);
