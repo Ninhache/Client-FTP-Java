@@ -63,30 +63,35 @@ public class Client implements Closeable {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
 		run("manual");
-		
+
 		run("help", "NLST");
-		
+
 		run("login", "user", "12345");
 		
 		run("cwd", "pyftpdlib");
 
 		run("username", "anonymous");
 		run("password", "_");
-		
+
+
+		/*
 		run("pwd");
+
 		run("list", "images");
-		
+
 
 		run("cd", "pdf/");
 		run("list");
 		run("cdup");
 
 		run("ls");
-		
+
 		run("noop");
-		run("list");
-		
-		
+		*/
+
+		//run("list");
+		//run("size", "hello.txt"); // 22 mais c'est dans la mauvaise section
+
 		run("quit");
 		
 		//throw new IOException("End of loop");
@@ -96,7 +101,7 @@ public class Client implements Closeable {
 	public Channel requireDC(Type type, Structure stru, Mode mode) throws IOException {
 		return configureDC(type, stru, mode).createDC().data;
 	}
-	
+
 	/**
 	 * Configure le canal de données du client FTP
 	 */
@@ -104,10 +109,10 @@ public class Client implements Closeable {
 		run("TYPE", type.toString());
 		run("STRU", stru.toString());
 		run("MODE", mode.toString());
-		
+
 		return this;
 	}
-	
+
 	/**
 	 * Créée le canal de données
 	 */
@@ -115,7 +120,7 @@ public class Client implements Closeable {
 		run("PASV");
 		return this;
 	}
-	
+
 	/**
 	 * Assigne le canal de données du client FTP
 	 */
@@ -140,7 +145,7 @@ public class Client implements Closeable {
 			control.close();
 		}
 	}
-	
+
 	protected void onDataChannelClosed(Channel channel) {
 		System.out.println("=== DATA CHANNEL CLOSED ===");
 	}
