@@ -62,7 +62,9 @@ public class Client implements Closeable {
 	protected void loop() throws IOException {
 		// Traiter la réception / réponse via les canaux de controle et de données 
 
-		//run("manual");
+		run("manual");
+		
+		run("help", "NLST");
 		
 		run("login", "user", "12345");
 		
@@ -72,13 +74,16 @@ public class Client implements Closeable {
 		run("password", "_");
 		
 		run("pwd");
+		run("list", "images");
+		
+
 		run("cd", "pdf/");
 		run("list");
 		run("cdup");
 
 		run("ls");
 		
-		//run("noop");
+		run("noop");
 		run("list");
 		
 		
