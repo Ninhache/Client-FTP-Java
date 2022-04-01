@@ -78,6 +78,10 @@ public class Response {
 		return new Response(status, sb.toString());
 	}
 	
+	public static final Response create(Status status, String body) {
+		return new Response(status, body);
+	}
+	
 	public static final Response create(int status, String message, String body) {
 		return parse(String.format("%s\n%d %s", body, status, message));
 	}
@@ -92,6 +96,13 @@ public class Response {
 	
 	@Override
 	public String toString() {
-		return String.format("%d %s", getStatusCode(), getStatusMessage());
+		return toString(false);
+	}
+	
+	public String toString(boolean includeBody) {
+		String body = getBody();
+		return includeBody && (body != null && body.length() > 0)
+		? String.format("%d %s\n%s", getStatusCode(), getStatusMessage(), getBody())
+		: String.format("%d %s", getStatusCode(), getStatusMessage());
 	}
 }

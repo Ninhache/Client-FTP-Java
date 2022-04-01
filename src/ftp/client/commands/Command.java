@@ -56,11 +56,17 @@ public abstract class Command {
 			sb.append(line);
 			
 			if (DISPLAY_OUTPUT) {
-				System.err.println(line);				
+				//System.err.println(line);				
 			}
 		} while (client.control.ready());
 		
-		return Response.parse(sb.toString());
+		Response resp = Response.parse(sb.toString());
+		
+		if (DISPLAY_OUTPUT) {
+			System.err.println(resp.toString(false));				
+		}
+		
+		return resp;
 	}
 	
 	/**

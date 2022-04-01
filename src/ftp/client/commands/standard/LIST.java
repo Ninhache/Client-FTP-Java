@@ -28,9 +28,9 @@ public class LIST extends Command {
     			: execServer(client, "LIST");
     	
     	try (Channel data = client.requireDC(Type.ASCII, Structure.FILE, Mode.STREAM)) {
-    		System.out.println(data.readlns());
+    		resp = Response.create(resp.getStatus(), data.readlns());
+    		System.out.println(resp.getBody());
+    		return resp;
     	}
-    	
-    	return resp;
     }
 }
