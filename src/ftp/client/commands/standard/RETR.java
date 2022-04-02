@@ -10,6 +10,7 @@ import ftp.client.Client;
 import ftp.client.annotations.Description;
 import ftp.client.annotations.FTP;
 import ftp.client.annotations.Name;
+import ftp.client.annotations.Note;
 import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.io.Channel;
@@ -22,36 +23,44 @@ import ftp.client.response.Response;
 @Name("Download File")
 @Description("Download a file from the server to the local machine")
 @Syntax("RETR <server file> [local destination]")
+@Note("You can add quotes around file names if they fcontain spaces")
 public class RETR extends Command {
 	public static final int BUFFER_SIZE = 2048;
 	
 	@Override
 	protected String getParamsExpression() {
-		return "(?<file>\\p{ASCII}+)( (?<dest>\\p{ASCII}+))?";
+		return "(\\\"(?<source1>[a-zA-Z0-9\\\\\\/\\._+-=]+)\\\"( \\\"(?<dest1>[a-zA-Z0-9\\\\\\/\\._+-=]+)\\\")?|(?<source2>[a-zA-Z0-9\\\\\\/\\._+-=]+)( (?<dest2>[a-zA-Z0-9\\\\\\/\\._+-=]+))?)";
 	}
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		String fileName = params.group("file");
-		String destName = params.group("dest");
+		String source = params.group("source1");
+		String dest = params.group("dest1");;
+		if (source == null) {
+			source = params.group("source2");
+			dest = params.group("dest2");
+			if (source == null) {
+				return Response.create(500, "Please specify a file to retrieve");
+			}
+		}
 		
-		Response resp = execServer(client, "RETR", fileName);
+		File sourceFile = new File(source);
+		File destFile = dest != null
+			? new File(dest)
+			: new File(System.getProperty("user.dir") + File.separator + sourceFile.getName());
+		
+		if (destFile.isDirectory()) {
+			destFile = new File(destFile.getAbsolutePath() + File.separator + sourceFile.getName());
+		}
+		
+		Response resp = execServer(client, "RETR", source);
 		
 		requireOK(resp);
-		
-		File fileInfo = new File(fileName);
-		File dest = destName != null
-			? new File(destName)
-			: new File(System.getProperty("user.dir") + File.separator + fileInfo.getName());
-		
-		if (dest.isDirectory()) {
-			dest = new File(dest.getAbsolutePath() + File.separator + fileInfo.getName());
-		}
 		
 		try (Channel data = client.requireDC(Type.BINARY, Structure.FILE, Mode.STREAM)) {
 			InputStream stream = data.getSocket().getInputStream();
 			
-    		try (FileOutputStream out = new FileOutputStream(dest)) {
+    		try (FileOutputStream out = new FileOutputStream(destFile)) {
     			byte[] buffer = new byte[BUFFER_SIZE];
     			int read = -1;
     			while ((read = stream.read(buffer)) > 0) {
@@ -59,7 +68,9 @@ public class RETR extends Command {
     			}
             }
     		
-    		return Response.create(resp.getStatusCode(), "Transfer complete");
+    		client.control.readlns();
+
+    		return Response.create(resp.getStatusCode(), "Saved '" + source + "' as '" + destFile.getAbsolutePath() + "'");
     	}
 	}
 }
