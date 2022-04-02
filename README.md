@@ -2,7 +2,7 @@
 > Client Graphique :
 https://gitlab.univ-lille.fr/neo.almeida.etu/m4105c-project-2
 
-## Building
+## Compiler et exécuter le logiciel
 > Ce projet nécessite Maven.
 
 Lancer le client FTP
