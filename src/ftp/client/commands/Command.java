@@ -30,6 +30,14 @@ public abstract class Command {
 		
 		if (paramsMatch.matches()) {
 			return run(client, paramsMatch);
+		} else {
+			System.err.println("Invalid use of the '" + getName().toLowerCase() + "' command");
+			System.out.println("Syntax: " + getSyntax());
+			String note = getNote();
+			if (note != null && note.length() > 0) {
+				System.out.println("Note: " + note);				
+			}
+			System.out.println("Use 'HELP " + getKeyword().toUpperCase() + "' for more information");
 		}
 		
 		return null;

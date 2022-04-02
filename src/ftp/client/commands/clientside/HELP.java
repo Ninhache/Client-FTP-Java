@@ -16,10 +16,10 @@ import ftp.client.response.Response;
 import static ftp.client.Utils.*;
 
 @FTP({ "help", "manual", "?" })
-@Name("User Manual (Help)")
+@Name("Client Command Help (User Manual)")
 @Description("Shows the list of commands that this client supports as well as command-specific details")
 @Syntax("HELP [command]")
-@Note("USe SVHP to use the server help command instead")
+@Note("Use SVHP to use the server help command instead")
 public class HELP extends Command {
 	public static int HELP_SUCCESS = 214;
 	@Override
@@ -74,7 +74,7 @@ public class HELP extends Command {
 					 note = cmd.getNote();
 		final String[] aliases = cmd.getAliases();
 		
-		println(sb, "%s - %s", keyword.toUpperCase(), name);
+		println(sb, "[%s] %s", keyword.toUpperCase(), name);
 		if (description.length() > 0) {
 			println(sb, description);
 		}
@@ -84,11 +84,11 @@ public class HELP extends Command {
 		}
 		
 		if (aliases.length > 0) {
-			println(sb, "Aliases : %s", String.join(" ", aliases));
+			println(sb, "Aliases: %s", String.join(", ", aliases));
 		}
 		
 		if (note.length() > 0) {
-			println(sb, "Note : %s", note);
+			println(sb, "Note   : %s", note);
 		}
 		
 		return Response.create(HELP_SUCCESS, "Help for '" + command + "'", sb.toString());
