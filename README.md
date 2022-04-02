@@ -7,7 +7,7 @@ https://gitlab.univ-lille.fr/neo.almeida.etu/m4105c-project-2
 
 Lancer le client FTP
 ```sh
-mvn compile exec:java <hôte> <port>
+mvn compile exec:java
 ```
 
 ## Commandes
