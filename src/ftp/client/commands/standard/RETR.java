@@ -44,6 +44,10 @@ public class RETR extends Command {
 			? new File(destName)
 			: new File(System.getProperty("user.dir") + File.separator + fileInfo.getName());
 		
+		if (dest.isDirectory()) {
+			dest = new File(dest.getAbsolutePath() + File.separator + fileInfo.getName());
+		}
+		
 		try (Channel data = client.requireDC(Type.BINARY, Structure.FILE, Mode.STREAM)) {
 			InputStream stream = data.getSocket().getInputStream();
 			
