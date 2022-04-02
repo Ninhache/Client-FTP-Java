@@ -26,11 +26,7 @@ public class MODE extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		Response resp = execServer(client, "MODE", params.group("mode").toUpperCase());
-		
-		if (!resp.ok()) {
-			failRequest(resp);
-		}
-		
+		requireOK(resp);
 		return resp;
 	}
 }

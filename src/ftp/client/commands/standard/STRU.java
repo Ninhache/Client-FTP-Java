@@ -26,11 +26,7 @@ public class STRU extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		Response resp = execServer(client, "STRU", params.group("struct").toUpperCase());
-
-		if (!resp.ok()) {
-			failRequest(resp);
-		}
-		
+		requireOK(resp);
 		return resp;
 	}
 }

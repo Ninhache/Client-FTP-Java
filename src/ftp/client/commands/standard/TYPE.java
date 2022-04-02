@@ -26,11 +26,7 @@ public class TYPE extends Command {
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
 		Response resp = execServer(client, "TYPE", params.group("type").toUpperCase());
-
-		if (!resp.ok()) {
-			failRequest(resp);
-		}
-		
+		requireOK(resp);
 		return resp;
 	}
 }

@@ -19,16 +19,19 @@ import java.util.regex.Matcher;
 public class SIZE extends Command {
     @Override
     protected String getParamsExpression() {
-        return "(?<size>\\d+)";
+        return "(?<file>\\p{ASCII}+)";
     }
 
     @Override
     public Response run(Client client, Matcher params) throws IOException {
         Response resp = execLocal(client, "TYPE", Type.BINARY.toString());
-        if (!resp.ok()) {
-        	return resp;
-        }
+        requireOK(resp);
         
-        return execServer(client, "SIZE", params.group("size"));
+        String file = params.group("file");
+        resp = execServer(client, "SIZE", file);
+        
+        requireOK(resp);
+        
+        return Response.create(resp.getStatusCode(), String.format("%s is %s bytes", file, resp.getStatusMessage()), resp.getBody());
     }
 }

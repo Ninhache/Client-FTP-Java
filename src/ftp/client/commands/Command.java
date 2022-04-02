@@ -118,4 +118,10 @@ public abstract class Command {
 	 * @return Une expression régulière
 	 */
 	protected abstract String getParamsExpression();
+	
+	protected void requireOK(Response resp) {
+		if (!resp.ok()) {
+			failRequest(resp);
+		}
+	}
 }

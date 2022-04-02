@@ -33,9 +33,7 @@ public class LIST extends Command {
     			? execServer(client, "LIST", dir)
     			: execServer(client, "LIST");
     	
-    	if (!resp.ok()) {
-    		return resp;
-    	}
+    	requireOK(resp);
     	
     	try (Channel data = client.requireDC(Type.ASCII, Structure.FILE, Mode.STREAM)) {
     		resp = Response.create(resp.getStatus(), data.readlns());

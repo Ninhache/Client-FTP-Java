@@ -25,12 +25,6 @@ public class PASS extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		Response resp = execServer(client, "PASS", params.group("password"));
-		
-		if (resp.ok()) {
-			System.out.println("Login successful!");
-		}
-		
-		return resp;
+		return execServer(client, "PASS", params.group("password"));
 	}
 }

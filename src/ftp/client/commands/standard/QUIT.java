@@ -19,7 +19,6 @@ public class QUIT extends CommandWithoutParameters {
 	public Response run(Client client) throws IOException {
 		Response resp = execServer(client, "QUIT");
 		if (resp.ok()) {
-			System.out.println("Quitting FTP client...");
 			client.close();
 		}
 		return resp;
