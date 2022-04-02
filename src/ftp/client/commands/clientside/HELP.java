@@ -7,6 +7,7 @@ import ftp.client.Client;
 import ftp.client.annotations.Description;
 import ftp.client.annotations.FTP;
 import ftp.client.annotations.Name;
+import ftp.client.annotations.Note;
 import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.commands.Commander;
@@ -17,7 +18,8 @@ import static ftp.client.Utils.*;
 @FTP({ "help", "manual", "?" })
 @Name("User Manual (Help)")
 @Description("Shows the list of commands that this client supports as well as command-specific details")
-@Syntax("")
+@Syntax("HELP [command]")
+@Note("USe SVHP to use the server help command instead")
 public class HELP extends Command {
 	public static int HELP_SUCCESS = 214;
 	@Override
