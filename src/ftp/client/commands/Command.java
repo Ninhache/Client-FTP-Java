@@ -1,6 +1,7 @@
 package ftp.client.commands;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,8 @@ import ftp.client.response.Response;
  * Base de toutes les commandes FTP gérées par le client
  */
 public abstract class Command {
+	public static final int STATUS_TIMEOUT = 542;
+	
 	/**
 	 * Exécute la commande client
 	 */
@@ -52,14 +55,19 @@ public abstract class Command {
 		StringBuilder sb = new StringBuilder();
 		String line = "";
 		
-		do {
-			line = client.control.readln();
-
-			if (sb.length() > 0) {
-				sb.append("\n");
+		try {
+			do {
+				line = client.control.readln();
+				if (sb.length() > 0) {
+					sb.append("\n");
+				}
+				sb.append(line);
+			} while (client.control.ready());			
+		} catch (SocketTimeoutException e) {
+			if (sb.length() == 0) {
+				return Response.create(STATUS_TIMEOUT, "Read timed out");				
 			}
-			sb.append(line);
-		} while (client.control.ready());
+		}
 		
 		return Response.parse(sb.toString());
 	}

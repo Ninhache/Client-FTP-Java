@@ -7,7 +7,7 @@ public enum StatusType {
 	POSITIVE_COMPLETION(2, true),
 	POSITIVE_INTERMEDIATE(3, true),
 	TRANSIENT_NEGATIVE_COMPLETION(4, false),
-	PERMANENT_NEFATIVE_COMPLETION(5, false);
+	PERMANENT_NEGATIVE_COMPLETION(5, false);
 
 	private final int NUMBER;
 	private final boolean IS_OK;

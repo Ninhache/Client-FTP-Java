@@ -18,6 +18,8 @@ import ftp.client.response.Response;
 @Syntax("PASS <password>")
 @Note("This command must follow the USER command")
 public class PASS extends Command {
+	public static final int AUTH_FAILED_READTIMEOUT = 10;
+	
 	@Override
 	protected String getParamsExpression() {
 		return "(?<password>\\p{ASCII}+)";
@@ -25,6 +27,16 @@ public class PASS extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		return execServer(client, "PASS", params.group("password"));
+		Response resp = execServer(client, "PASS", params.group("password"));
+		
+		if (!resp.ok()) {
+			int retries = 0;
+			while (resp.getStatusCode() == STATUS_TIMEOUT && (++retries < AUTH_FAILED_READTIMEOUT)) {
+				resp = execLocal(client, "NOOP");
+			}
+			client.control.readlns();
+		}
+		
+		return resp;
 	}
 }

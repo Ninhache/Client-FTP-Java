@@ -24,10 +24,10 @@ public class LOGIN extends Command {
 
 	@Override
 	public Response run(Client client, Matcher params) throws IOException {
-		Response userResp = execLocal(client, "USER", params.group("username"));
+		Response resp = execLocal(client, "USER", params.group("username"));
 		
-		if (userResp.getStatusType() != StatusType.POSITIVE_INTERMEDIATE) {
-			return userResp;
+		if (resp.getStatusType() != StatusType.POSITIVE_INTERMEDIATE) {
+			failRequest(resp);
 		}
 		
 		return execLocal(client, "PASS", params.group("password"));
