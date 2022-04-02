@@ -39,7 +39,9 @@ public class LIST extends Command {
     	
     	try (Channel data = client.requireDC(Type.ASCII, Structure.FILE, Mode.STREAM)) {
     		resp = Response.create(resp.getStatus(), data.readlns());
-    		System.out.println(resp.getBody());
+    		
+    		client.control.readlns();
+    		
     		return resp;
     	}
     }

@@ -5,6 +5,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ftp.client.Client;
+import ftp.client.annotations.Description;
+import ftp.client.annotations.FTP;
+import ftp.client.annotations.Name;
+import ftp.client.annotations.Note;
+import ftp.client.annotations.Syntax;
 import ftp.client.exceptions.EarlyResponseException;
 import ftp.client.response.Response;
 
@@ -12,8 +17,6 @@ import ftp.client.response.Response;
  * Base de toutes les commandes FTP gérées par le client
  */
 public abstract class Command {
-	public static boolean DISPLAY_OUTPUT = true;
-	
 	/**
 	 * Exécute la commande client
 	 */
@@ -51,24 +54,56 @@ public abstract class Command {
 		
 		do {
 			line = client.control.readln();
-			
+
 			if (sb.length() > 0) {
 				sb.append("\n");
 			}
 			sb.append(line);
-			
-			if (DISPLAY_OUTPUT) {
-				//System.err.println(line);				
-			}
 		} while (client.control.ready());
 		
-		Response resp = Response.parse(sb.toString());
-		
-		if (DISPLAY_OUTPUT) {
-			System.err.println(resp.toString(false));				
-		}
-		
-		return resp;
+		return Response.parse(sb.toString());
+	}
+	
+	public String getKeyword() {
+		String[] aliases = getAliases();
+		return aliases != null && aliases.length > 0
+			? aliases[0]
+			: null;
+	}
+	
+	public String getName() {
+		Name name = getClass().getAnnotation(Name.class);
+		return name != null
+			? name.value()
+			: "";
+	}
+	
+	public String getDescription() {
+		Description description = getClass().getAnnotation(Description.class);
+		return description != null
+			? description.value()
+			: "";
+	}
+	
+	public String getSyntax() {
+		Syntax syntax = getClass().getAnnotation(Syntax.class);
+		return syntax != null
+			? syntax.value()
+			: "";
+	}
+	
+	public String getNote() {
+		Note note = getClass().getAnnotation(Note.class);
+		return note != null && note.value().length > 0
+			? String.join("\n", note.value())
+			: "";
+	}
+	
+	public String[] getAliases() {
+		FTP ftp = getClass().getAnnotation(FTP.class);
+		return ftp != null && ftp.value().length > 0
+			? ftp.value()
+			: new String[0];
 	}
 	
 	/**

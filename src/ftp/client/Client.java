@@ -14,6 +14,8 @@ import ftp.client.io.Structure;
 import ftp.client.io.Type;
 import ftp.client.response.Response;
 
+import static ftp.client.Keyboard.*;
+
 /**
  * Classe gérant un client (canal de controle et canal de données)
  */
@@ -42,8 +44,15 @@ public class Client implements Closeable {
 		control = new ClientChannel(address, port);
 		dataWrapper = new ChannelWrapper(this::onDataChannelClosed);
 		data = dataWrapper;
+		welcome();
 	}
 
+	protected void welcome() {
+		System.out.println("FTP Client - M4105C");
+		System.out.println("Type 'HELP' for a list of commands and 'HELP <command>' for command-specific help");
+		System.out.println("Type 'SVHP' if you intent to use the default FTP HELP command instead");
+	}
+	
 	/**
 	 * Connecte le client au serveur souhaité
 	 * @throws IOException
@@ -60,22 +69,10 @@ public class Client implements Closeable {
 	}
 	
 	protected void loop() throws IOException {
-		run("login", "user", "12345");
-		run("cd", "ftp/");
-		run("mkd", "test_folder");
-		run("mkd", "test_folder_2");
-		run("rmd", "test_folder_2");
-		run("rmd", "test_folder_2");
-		run("list");
-		//run("cdup");
-
-		//run("ls");
-		
-		//run("noop");
-		//run("list");
-		run("quit");
-		
-		//throw new IOException("End of loop");
+		System.out.print("$ ");
+		String prompt = keyboard.readLine();
+		System.out.flush();
+		command(prompt);
 	}
 	
 	@SuppressWarnings("resource")
@@ -113,11 +110,16 @@ public class Client implements Closeable {
 	/**
 	 * Exécute une commande et retourne sa réponse
 	 */
-	protected Response run(String... values) throws IOException {
-		System.out.println("### " + String.join(" ", values));
-		Response resp = Commander.run(this, values);
-		System.out.println("===== ===== =====");
+	protected Response command(String... values) throws IOException {
+		Response resp = run(values);
+		if (resp != null) {
+			System.out.println(resp.toString(true));			
+		}
 		return resp;
+	}
+	
+	protected Response run(String... values) throws IOException {
+		return Commander.run(this, values);
 	}
 	
 	/**

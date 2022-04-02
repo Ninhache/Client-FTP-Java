@@ -2,10 +2,12 @@ package ftp.client.commands;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.reflections.Reflections;
 
@@ -63,7 +65,8 @@ public final class Commander {
 		Matcher match = COMMAND_PATTERN.matcher(command);
 		
 		if (!match.matches()) {
-			System.err.println("Invalid command: " + command);
+			System.out.println("Invalid command");
+			System.out.println("Type 'HELP' for a list of commands");
 			return null;
 		}
 		
@@ -76,10 +79,9 @@ public final class Commander {
 		Command comm = COMMANDS.get(name);
 		
 		if (comm != null) {
-			Response resp = comm.run(client, params);
-			return resp;
+			return comm.run(client, params);
 		} else {
-			System.err.println("Command '" + name + "' is unknown");
+			System.out.println("Command '" + name + "' is unknown");
 		}
 		
 		return null;
@@ -87,5 +89,23 @@ public final class Commander {
 	
 	public static final Set<String> commandList() {
 		return COMMANDS.keySet();
+	}
+	
+	public static final Map<String, Command> getAllCommands() {
+		return COMMANDS;
+	}
+	
+	public static final List<Command> getCommandHandlers() {
+		return getAllCommands()
+			.values()
+			.stream()
+			.filter(c -> c.getKeyword() != null)
+			.distinct()
+			.sorted(Commander::compare)
+			.collect(Collectors.toList());
+	}
+	
+	protected static final int compare(Command a, Command b) {
+		return a.getKeyword().compareTo(b.getKeyword());
 	}
 }

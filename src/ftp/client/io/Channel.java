@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public interface Channel extends Closeable {
 	void connect() throws IOException;
@@ -30,7 +31,7 @@ public interface Channel extends Closeable {
 				}
 			}
 			return sb.toString();
-		} catch (NullPointerException ex) {
+		} catch (NullPointerException|SocketTimeoutException ex) {
 			return "";
 		}
 	}

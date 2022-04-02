@@ -11,10 +11,10 @@ import ftp.client.annotations.Syntax;
 import ftp.client.commands.Command;
 import ftp.client.response.Response;
 
-@FTP({ "help", "?", "man", "manual"  })
-@Name("Help")
+@FTP({ "svhp", "servhelp", "svhlp", "rfc" })
+@Name("Server Command Help")
 @Description("Displays manual entries for FTP commands accepted by the server")
-@Syntax("HELP [command]")
+@Syntax("SVHP [command]")
 public class HELP extends Command {
 	@Override
 	protected String getParamsExpression() {
@@ -25,16 +25,8 @@ public class HELP extends Command {
 	public Response run(Client client, Matcher params) throws IOException {
 		String command = params.group("command");
 		
-		Response resp = command != null
-				? execServer(client, "HELP", command)
-				: execServer(client, "HELP");
-		
-		if (resp.ok()) {
-			//System.out.println("List of FTP commands accepted by the server");
-			System.out.println(resp.getBody());			
-		}
-		
-		return resp;
+		return command != null
+			? execServer(client, "HELP", command)
+			: execServer(client, "HELP");
 	}
-
 }
