@@ -19,9 +19,7 @@ public final class Utils {
 				closeInputStream(socket.getInputStream());
 				closeOutputStream(socket.getOutputStream());
 				socket.close();				
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
+			} catch (IOException exception) {}
 		}
 	}
 	
@@ -33,9 +31,7 @@ public final class Utils {
 		if (socket != null && !socket.isClosed()) {
 			try {
 				socket.close();				
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
+			} catch (IOException exception) {}
 		}
 	}
 	

@@ -6,7 +6,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import ftp.client.commands.Commander;
+import ftp.client.exceptions.EarlyResponseException;
 import ftp.client.io.Channel;
+import ftp.client.io.ChannelDirection;
 import ftp.client.io.ChannelWrapper;
 import ftp.client.io.ClientChannel;
 import ftp.client.io.Mode;
@@ -24,6 +26,8 @@ public class Client implements Closeable {
 	public final Channel data;
 	
 	protected final ChannelWrapper dataWrapper;
+	
+	protected ChannelDirection autoChannelDirection = ChannelDirection.ACTIVE;
 	
 	/**
 	 * Construit un client en se connectant à l'hote sur le port spécifié
@@ -95,8 +99,16 @@ public class Client implements Closeable {
 	 * Créée le canal de données
 	 */
 	public Client createDC() throws IOException {
-		run("PASV");
-		return this;
+		switch (autoChannelDirection) {
+			case ACTIVE:
+				run("PORT");
+				return this;
+			case PASSIVE:
+				run("PASV");
+				return this;
+			default:
+				throw new EarlyResponseException(Response.create(500, "No channel direction set (HELP DATA)"));
+		}
 	}
 
 	/**
@@ -130,6 +142,10 @@ public class Client implements Closeable {
 		if (control != null) {
 			control.close();
 		}
+	}
+	
+	public void setPreferedChannelDirection(ChannelDirection value) {
+		autoChannelDirection = value;
 	}
 
 	protected void onDataChannelClosed(Channel channel) {
