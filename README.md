@@ -14,6 +14,7 @@ mvn compile exec:java
 |Commande client|Description|
 |--|--|
 |`LOGIN`|Login to a specified user.|
+|`DATA`|Select between active and passive mode for data transfer.|
 |`HELP`|Returns usage documentation on a command if specified, else a general help document is returned.|
 |`SVHP`|Displays the server help page for a command if specified or a list of commands.|
 
