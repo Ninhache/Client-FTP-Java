@@ -14,7 +14,7 @@ import ftp.client.response.Response;
 
 @FTP({ "stru", "struct", "structure" })
 @Name("Transfer Structure")
-@Description("Desines how data will be structured inside packets for transfer between the client and the server")
+@Description("Desides how data will be structured inside packets for transfer between the client and the server")
 @Syntax("STRU <stru>")
 @Note("<struc> :: F=File | R=Record | P=Page")
 public class STRU extends Command {
