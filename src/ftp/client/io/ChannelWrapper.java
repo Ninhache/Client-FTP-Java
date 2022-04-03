@@ -1,6 +1,8 @@
 package ftp.client.io;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.function.Consumer;
@@ -35,7 +37,7 @@ public class ChannelWrapper implements Channel {
 	}
 	
 	public void setChannel(Channel channel, boolean closePrevious) {
-		if (closePrevious && this.channel != null && !this.channel.getSocket().isClosed()) {
+		if (closePrevious && this.channel != null && !isClosed()) {
 			this.channel.close();
 		}
 		this.channel = channel;
@@ -68,11 +70,6 @@ public class ChannelWrapper implements Channel {
 	}
 
 	@Override
-	public Socket getSocket() {
-		return channel.getSocket();
-	}
-
-	@Override
 	public InetAddress getAddress() {
 		return channel.getAddress();
 	}
@@ -95,5 +92,35 @@ public class ChannelWrapper implements Channel {
 			CLOSED_CALLBACK.accept(channel);
 		}
 		channel.close();
+	}
+
+	@Override
+	public InputStream getInputStream() throws IOException {
+		return channel.getInputStream();
+	}
+
+	@Override
+	public OutputStream getOutputStream() throws IOException {
+		return channel.getOutputStream();
+	}
+
+	@Override
+	public boolean isBound() {
+		return channel.isBound();
+	}
+
+	@Override
+	public boolean isConnected() {
+		return channel.isConnected();
+	}
+
+	@Override
+	public boolean isClosed() {
+		return channel.isClosed();
+	}
+
+	@Override
+	public Socket getSocket() {
+		return channel.getSocket();
 	}
 }

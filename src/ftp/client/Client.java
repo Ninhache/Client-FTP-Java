@@ -60,7 +60,7 @@ public class Client implements Closeable {
 	public void start() {
 		try {
 			control.connect();
-			while (!control.getSocket().isClosed()) 
+			while (!control.isClosed()) 
 				loop();
 		} catch (IOException exception) {
 			exception.printStackTrace();

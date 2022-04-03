@@ -2,6 +2,8 @@ package ftp.client.io;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -13,10 +15,20 @@ public interface Channel extends Closeable {
 	boolean ready() throws IOException;
 	String readln() throws IOException;
 	
-	Socket getSocket();
 	InetAddress getAddress();
-	String getHost();
+	default String getHost() {
+		return getAddress().getHostName();
+	}
 	int getPort();
+
+	Socket getSocket();
+	
+	boolean isBound();
+	boolean isConnected();
+	boolean isClosed();
+	
+	InputStream getInputStream() throws IOException;
+	OutputStream getOutputStream() throws IOException;
 	
 	default String readlns() throws IOException {
 		try {
